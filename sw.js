@@ -78,19 +78,26 @@ self.addEventListener('fetch', (event) => {
   const sameOrigin = url.origin === self.location.origin;
   if (!sameOrigin && req.url !== LIB_URL) return;
 
-  // 画面の移動は index.html を返す（オフラインでも開けるように）
-  if (req.mode === 'navigate') {
-    event.respondWith(fetch(req).catch(() => caches.match('index.html')));
+  // 画面の移動と設定（config.js）は、最新を取りに行く。オフラインのときだけ保存済みを使う
+  const isConfig = sameOrigin && url.pathname.endsWith('/config.js');
+  if (req.mode === 'navigate' || isConfig) {
+    const key = req.mode === 'navigate' ? 'index.html' : 'config.js';
+    event.respondWith(
+      fetch(req, { cache: 'no-store' }).then((res) => {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then((cache) => cache.put(key, copy));
+        }
+        return res;
+      }).catch(() => caches.open(CACHE).then((cache) => cache.match(key)))
+    );
     return;
   }
-  // 保存済みならそれを使い、なければ取得して保存する
+  // それ以外は、この版で保存したものを使い、なければ取得して保存する（古い版の保存分は使わない）
   event.respondWith(
-    caches.match(req, { ignoreSearch: sameOrigin }).then((hit) => hit || fetch(req).then((res) => {
-      if (res && res.ok) {
-        const copy = res.clone();
-        caches.open(CACHE).then((cache) => cache.put(req, copy));
-      }
+    caches.open(CACHE).then((cache) => cache.match(req, { ignoreSearch: sameOrigin }).then((hit) => hit || fetch(req).then((res) => {
+      if (res && res.ok) cache.put(req, res.clone());
       return res;
-    }))
+    })))
   );
 });

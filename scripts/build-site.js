@@ -39,7 +39,10 @@ const config = 'window.STUDY_APP_CONFIG = ' + JSON.stringify(
   null, 2) + ';\n';
 fs.writeFileSync(path.join(OUT, 'config.js'), config);
 
-const version = (process.env.GITHUB_SHA || String(Date.now())).slice(0, 12);
+// コミットが同じでも、公開をやり直すたびに版を変える（設定を変えて再実行したときも、端末が更新に気づけるように）
+const version = process.env.GITHUB_SHA
+  ? process.env.GITHUB_SHA.slice(0, 8) + '-' + (process.env.GITHUB_RUN_ID || '0') + '-' + (process.env.GITHUB_RUN_ATTEMPT || '1')
+  : String(Date.now());
 const sw = fs.readFileSync(path.join(ROOT, 'sw.js'), 'utf8').replace('__BUILD__', version);
 fs.writeFileSync(path.join(OUT, 'sw.js'), sw);
 
