@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#f2f5f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d141c" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="自分専用の学習アプリ。簿記・会計ほか">
+  <!-- ホーム画面に追加したとき（iPhone） -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="学習ノート">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="icons/icon-192.png" type="image/png" sizes="192x192">
+  <title>学習ノート</title>
+  <link rel="stylesheet" href="css/app.css">
+  <script src="js/pwa.js"></script>
+</head>
+<body>
+  <div id="storage-warning" class="banner banner-warn" role="alert" hidden>
+    この環境ではデータを保存できません（プライベートモードなど）。ページを閉じると学習記録は消えます。設定画面からJSONで書き出してください。
+  </div>
+  <header class="topbar">
+    <a class="brand" href="#/" aria-label="学習ノート（ホーム）">
+      <svg class="brand-mark" viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="112" fill="#233f86"/><rect x="104" y="128" width="304" height="40" rx="8" fill="#fff"/><rect x="236" y="128" width="40" height="240" rx="8" fill="#fff"/><rect x="104" y="384" width="304" height="16" rx="8" fill="#ff8a78"/><rect x="104" y="414" width="304" height="16" rx="8" fill="#ff8a78"/></svg>
+      <span>学習ノート</span>
+    </a>
+    <span id="crumb" class="crumb"></span>
+    <a id="sync-chip" class="sync-chip" href="#/settings" data-state="unconfigured">同期なし</a>
+    <a id="settings-link" class="icon-link" href="#/settings" aria-label="設定"></a>
+  </header>
+  <nav id="tabbar" class="tabbar" aria-label="コースのメニュー" hidden></nav>
+  <main id="view" class="view" tabindex="-1"></main>
+
+  <!-- 共通の仕組み -->
+  <script src="js/core/util.js"></script>
+  <script src="js/core/storage.js"></script>
+  <script src="js/core/edition.js"></script>
+  <script src="js/core/srs.js"></script>
+  <script src="js/core/grading.js"></script>
+  <script src="js/core/merge.js"></script>
+  <script src="courses/registry.js"></script>
+
+  <!-- コース: 簿記・会計（新しいコースは、この下に同じ形で追加する。sw.js の APP_FILES にも追加） -->
+  <script src="courses/boki/sources.js"></script>
+  <script src="courses/boki/config.js"></script>
+  <script src="courses/boki/accounts.js"></script>
+  <script src="courses/boki/plan.js"></script>
+  <script src="courses/boki/lessons.js"></script>
+  <script src="courses/boki/drills.js"></script>
+  <script src="courses/boki/cards.js"></script>
+  <script src="courses/boki/course.js"></script>
+
+  <!-- 同期の設定（Supabase の URL と anon キー）。ないときは同期せずに動く -->
+  <script src="config.js" onerror="window.STUDY_APP_CONFIG = null"></script>
+
+  <!-- 画面 -->
+  <script src="js/core/model.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/views/ui.js"></script>
+  <script src="js/views/login.js"></script>
+  <script src="js/views/home.js"></script>
+  <script src="js/views/course-home.js"></script>
+  <script src="js/views/plan.js"></script>
+  <script src="js/views/lessons.js"></script>
+  <script src="js/views/drill.js"></script>
+  <script src="js/views/cards.js"></script>
+  <script src="js/views/stats.js"></script>
+  <script src="js/views/sources.js"></script>
+  <script src="js/views/settings.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

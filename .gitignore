@@ -1,0 +1,12 @@
+# 同期の設定（Supabase の URL と anon キー）。ひな形は config.example.js
+/config.js
+
+# 公開用にまとめたファイル（scripts/build-site.js が作る）
+/_site/
+
+# 書き出した学習データ（個人のデータはリポジトリに入れない）
+study-app-*.json
+*.studydata.json
+
+.DS_Store
+Thumbs.db
