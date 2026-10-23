@@ -33,7 +33,11 @@
 2. 「New project」を押す。
 3. Name に `study-app`、Database Password に長いパスワード（「Generate a password」で自動作成）を入れる。これはデータベースの管理用で、アプリのログインには使いません。パスワード管理ツールに保存する。
 4. Region は「Northeast Asia (Tokyo)」を選ぶ。
-5. Plan が「Free」であることを確かめて、「Create new project」を押す。準備が終わるまで2分ほど待つ。
+5. 「Security」の欄は次のようにする。
+   - Enable Data API: **オン**（アプリはこの API で読み書きする）
+   - Automatically expose new tables: **オフ**（必要な権限は `schema.sql` で明示的に与える）
+   - Enable automatic RLS: **オン**
+6. Plan が「Free」であることを確かめて、「Create new project」を押す。準備が終わるまで2分ほど待つ。
 
 ### 2-2. テーブルと権限を作る
 

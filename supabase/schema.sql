@@ -7,6 +7,11 @@ create table if not exists public.user_state (
   updated_at timestamptz not null default now()
 );
 
+-- テーブルの権限: 未ログイン（anon）には何も許可せず、ログインした人（authenticated）にだけ読む・作る・更新するを許可する
+-- （プロジェクト作成時の「Automatically expose new tables」をオフにした場合も、オンの場合も、この状態にそろえる）
+revoke all on table public.user_state from anon, authenticated;
+grant select, insert, update on table public.user_state to authenticated;
+
 -- 行単位のアクセス制御（Row Level Security）を有効にする
 alter table public.user_state enable row level security;
 
