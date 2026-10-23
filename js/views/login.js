@@ -23,21 +23,24 @@
       return '<p>ログイン画面を読み込めませんでした。インターネットにつながっているか確かめて、ページを再読み込みしてください。</p>';
     }
     if (mode === 'code-email') {
-      return '<p class="small">登録しているメールアドレスに、確認コードを送ります。</p>' +
+      var standalone = SA.pwa && SA.pwa.isStandalone();
+      return '<p class="small">登録しているメールアドレスに、ログイン用のメールを送ります。</p>' +
+        (standalone ? '<p class="small"><strong>ホーム画面のアプリでは、メールのリンクを開いてもログインできません。</strong>Safari や Chrome で同じURLを開き、そこからメールを送ってください。ブラウザでログインしたら「設定」でパスワードを変え、このアプリでは新しいパスワードでログインします。</p>' : '') +
         '<label class="field">メールアドレス<input type="email" autocomplete="email" data-email value="' + esc(codeEmail) + '"></label>' +
-        '<div class="btn-row stretch"><button class="btn btn-primary" data-send>確認コードを送る</button></div>' +
+        '<div class="btn-row stretch"><button class="btn btn-primary" data-send>ログイン用のメールを送る</button></div>' +
         '<p class="small"><a href="#" data-mode="password">パスワードでログインする</a></p>';
     }
     if (mode === 'code-verify') {
-      return '<p class="small"><strong>' + esc(codeEmail) + '</strong> にメールを送りました。メールに書かれた確認コードを入力してください。</p>' +
-        '<label class="field">確認コード<input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10" data-code></label>' +
+      return '<p class="small"><strong>' + esc(codeEmail) + '</strong> にメールを送りました。メールの「Sign in」リンクを、<strong>このブラウザで</strong>開くとログインできます。ログインしたら「設定」でパスワードを変えてください。</p>' +
+        '<p class="small muted">メールに数字の確認コードが書かれている場合は、ここに入力してもログインできます。</p>' +
+        '<label class="field">確認コード（ある場合）<input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="10" data-code></label>' +
         '<div class="btn-row stretch"><button class="btn btn-primary" data-verify>ログイン</button></div>' +
         '<p class="small"><a href="#" data-mode="code-email">メールを送り直す</a>　<a href="#" data-mode="password">パスワードでログインする</a></p>';
     }
     return '<label class="field">メールアドレス<input type="email" autocomplete="username" data-email></label>' +
       '<label class="field">パスワード<input type="password" autocomplete="current-password" data-password></label>' +
       '<div class="btn-row stretch"><button class="btn btn-primary" data-login>ログイン</button></div>' +
-      '<p class="small"><a href="#" data-mode="code-email">パスワードを忘れた場合（メールの確認コードでログイン）</a></p>';
+      '<p class="small"><a href="#" data-mode="code-email">パスワードを忘れた場合（メールでログイン）</a></p>';
   }
 
   SA.views.login = function (ctx) {
